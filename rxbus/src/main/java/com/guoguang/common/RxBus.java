@@ -38,11 +38,11 @@ public class RxBus {
     }
 
 
-    public <T> void registerEvent(@NonNull Class<T>  eventType,@NonNull final RxBusEvent<T> obj){
+    public <T> void registerEvent(@NonNull Class<T>  eventType,@NonNull final RxBusEventAdaptor<T> obj){
         this.registerEvent(eventType,obj, Schedulers.newThread());
     }
 
-    public <T> void registerEvent(@NonNull Class<T> eventType,@NonNull final RxBusEvent<T> obj,@NonNull Scheduler scheduler){
+    public <T> void registerEvent(@NonNull Class<T> eventType,@NonNull final RxBusEventAdaptor<T> obj,@NonNull Scheduler scheduler){
         Subject<Object> subject = PublishSubject.create().toSerialized();
         subject.subscribeOn(scheduler).subscribe(new Consumer<Object>() {
             @Override
@@ -80,7 +80,7 @@ public class RxBus {
 
     }
 
-    public <T>void unRegisterEvent(@NonNull Class<T> eventType,@NonNull RxBusEvent<T> obj){
+    public <T>void unRegisterEvent(@NonNull Class<T> eventType,@NonNull RxBusEventAdaptor<T> obj){
         List<RegEventData> list = subjectMapper.get(eventType);
         synchronized (list) {
             if (list != null) {
@@ -107,7 +107,7 @@ public class RxBus {
     }
 
 
-    public static abstract class RxBusEvent<T>{
+    public static abstract class RxBusEventAdaptor<T>{
        abstract void  onEvent(T event);
        void onError(Throwable e){
            Log.e("RxBus","Error",e);

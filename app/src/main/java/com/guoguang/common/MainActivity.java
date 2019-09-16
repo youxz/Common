@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         rxBus = RxBus.getInstance();
 
 
-        rxBus.registerEvent(String.class,new RxBus.RxBusEvent<String>(){
+        rxBus.registerEvent(String.class,new RxBus.RxBusEventAdaptor<String>(){
 
             void onEvent(String event) {
 
